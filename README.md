@@ -133,6 +133,9 @@ python inference_video.py -labelmap_path label_map.pbtxt --model_path training/e
 ### Project overview
 This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
 
+### Set up
+This section should contain a brief description of the steps to follow to run the code for this repository.
+
 ### Dataset
 #### Dataset analysis
 This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
