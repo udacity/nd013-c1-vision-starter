@@ -8,8 +8,8 @@ For this project, we will be using data from the [Waymo Open dataset](https://wa
 
 The data in the classroom workspace will be organized as follows:
 ```
-/home/backups/
-    - raw: contained the tf records in the Waymo Open format. (NOTE: this folder only contains temporary files and should be empty after running the download and process script)
+/data/waymo/
+    - contains the tf records in the Waymo Open format. (NOTE: this folder contains the `segment` files that would otherwise be temporary files that should be removed if working locally with the download and processing script)
 
 /home/workspace/data/
     - processed: contained the tf records in the Tf Object detection api format. (NOTE: this folder should be empty after creating the splits)
@@ -53,14 +53,16 @@ It should display the content of the bucket.
 
 ### Download and process the data
 
-The first goal of this project is to download the data from the Waymo's Google Cloud bucket to your local machine. For this project, we only need a subset of the data provided (for example, we do not need to use the Lidar data). Therefore, we are going to download and trim immediately each file. In `download_process.py`, you will need to implement the `create_tf_example` function. This function takes the components of a Waymo Tf record and save them in the Tf Object Detection api format. An example of such function is described [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#create-tensorflow-records). We are already providing the `label_map.pbtxt` file. 
+The first goal of this project is to download the data from the Waymo's Google Cloud bucket to your local machine (this is already done for you if working in the classroom workspace). For this project, we only need a subset of the data provided (for example, we do not need to use the Lidar data). Therefore, we are going to download and trim immediately each file. In `download_process.py`, you can view the `create_tf_example` function, which will perform this processing. This function takes the components of a Waymo Tf record and saves them in the Tf Object Detection api format. An example of such function is described [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#create-tensorflow-records). We are already providing the `label_map.pbtxt` file.
 
-Once you have coded the function, you can run the script at using
+You can run the script using the following (you will need to change the directories, as desired, if working locally):
 ```
-python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/backups/
+python download_process.py --data_dir /home/workspace/data/ --temp_dir /home/waymo/
 ```
 
-You are downloading XX files so be patient! Once the script is done, you can look inside the `/home/workspace/data/processed` folder to see if the files have been downloaded and processed correctly.
+Note that the script within the workspace will have a small difference, as the raw files are already included therein, and do not need to be downloaded, but only processed.
+
+You are downloading 100 files so be patient! Once the script is done, you can look inside the `/home/workspace/data/processed` folder to see if the files have been downloaded and processed correctly.
 
 
 ### Exploratory Data Analysis
