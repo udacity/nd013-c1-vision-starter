@@ -38,15 +38,7 @@ Follow [the README therein](./build/README.md) to create a docker container and 
 
 ### Classroom Workspace
 
-In the classroom workspace, every library and package should already be installed in your environment. However, you will need to login to Google Cloud using the following command:
-```
-gcloud auth login
-```
-This command will display a link that you need to copy and paste to your web browser. Follow the instructions. You can check if you are logged correctly by running :
-```
-gsutil ls gs://waymo_open_dataset_v_1_2_0_individual_files/
-```
-It should display the content of the bucket.
+In the classroom workspace, every library and package should already be installed in your environment. You will not need to make use of `gcloud` to download the images.
 
 ## Instructions
 
