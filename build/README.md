@@ -5,15 +5,18 @@
 * NVIDIA GPU with the latest driver installed
 * docker / nvidia-docker
 
+This build has been tested with Nvidia Drivers 460.91.03 and CUDA 11.2. Please update the base image
+if you plan on using older versions of CUDA.
+
 ## Build
 Build the image with:
 ```
-docker build -t project-dev -f Dockerfile.gpu .
+docker build -t project-dev -f Dockerfile .
 ```
 
 Create a container with:
 ```
-docker run -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ -ti project-dev bash
+docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash
 ```
 and any other flag you find useful to your system (eg, `--shm-size`).
 
