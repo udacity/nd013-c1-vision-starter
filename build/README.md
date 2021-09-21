@@ -35,3 +35,6 @@ gcloud auth login
 ## Debug
 * Follow this [tutorial](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/install.html#tensorflow-object-detection-api-installation) if you run into any issue with the installation of the
 tf object detection api
+
+## Updating the instructions
+Feel free to submit PRs or issues should you see a scope for improvement. 
