@@ -22,10 +22,10 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         ffmpeg \
-	git \
+	    git \
         git-core \
         g++ \
-        vim \ 
+        vim \
         zip \
         zlib1g-dev \
         cuda-command-line-tools-${CUDA/./-} \
@@ -42,7 +42,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libzmq3-dev \
         pkg-config \
         software-properties-common \
-        unzip
+        unzip \
+        wget
 
 # Install TensorRT if not building for PowerPC
 # NOTE: libnvinfer uses cuda11.1 versions
@@ -71,16 +72,14 @@ RUN apt update -y && \
 RUN ln -s $(which python3) /usr/local/bin/python
 
 RUN python3 -m pip install tensorflow==2.5.0
- 
-WORKDIR /app 
+
+WORKDIR /app
 
 COPY requirements.txt .
 RUN python3 -m pip install -r requirements.txt
 RUN python3 -m pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
 
 ENV TF_CPP_MIN_LOG_LEVEL=2
-
-RUN apt-get update -y && apt-get install -y wget 
 
 RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/protoc-3.13.0-linux-x86_64.zip && \
     unzip protoc-3.13.0-linux-x86_64.zip -d /app/protobuf/

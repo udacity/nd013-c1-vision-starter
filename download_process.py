@@ -7,8 +7,10 @@ import ray
 import tensorflow.compat.v1 as tf
 from PIL import Image
 from psutil import cpu_count
+from waymo_open_dataset import dataset_pb2 as open_dataset
 
-from utils import *
+from utils import get_module_logger, parse_frame, int64_feature, int64_list_feature, \
+    bytes_list_feature, bytes_feature, float_list_feature
 
 
 def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
@@ -27,8 +29,10 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
         encoded_jpg_io = io.BytesIO(encoded_jpeg)
         image = Image.open(encoded_jpg_io)
         width, height = image.size
+        width_factor, height_factor = image.size
     else:
         image_tensor = tf.io.decode_jpeg(encoded_jpeg)
+        height_factor, width_factor, _ = image_tensor.shape
         image_res = tf.cast(tf.image.resize(image_tensor, (640, 640)), tf.uint8)
         encoded_jpeg = tf.io.encode_jpeg(image_res).numpy()
         width, height = 640, 640
@@ -46,10 +50,10 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
     for ann in annotations:
         xmin, ymin = ann.box.center_x - 0.5 * ann.box.length, ann.box.center_y - 0.5 * ann.box.width
         xmax, ymax = ann.box.center_x + 0.5 * ann.box.length, ann.box.center_y + 0.5 * ann.box.width
-        xmins.append(xmin / width)
-        xmaxs.append(xmax / width)
-        ymins.append(ymin / height)
-        ymaxs.append(ymax / height)
+        xmins.append(xmin / width_factor)
+        xmaxs.append(xmax / width_factor)
+        ymins.append(ymin / height_factor)
+        ymaxs.append(ymax / height_factor)
         classes.append(ann.type)
         classes_text.append(mapping[ann.type].encode('utf8'))
 
@@ -72,11 +76,11 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
 
 def download_tfr(filename, data_dir):
     """
-    download a single tf record 
+    download a single tf record
 
     args:
         - filename [str]: path to the tf record file
-        - temp_dir [str]: path to the directory where the raw data will be saved
+        - data_dir [str]: path to the destination directory
 
     returns:
         - local_path [str]: path where the file is saved
@@ -123,33 +127,33 @@ def process_tfr(path, data_dir):
 
 
 @ray.remote
-def download_and_process(filename, temp_dir, data_dir):
-    # need to re-import the logger because of multiprocesing
+def download_and_process(filename, data_dir):
     logger = get_module_logger(__name__)
-    local_path = download_tfr(filename, temp_dir)
+    # need to re-import the logger because of multiprocesing
+    local_path = download_tfr(filename, data_dir)
     process_tfr(local_path, data_dir)
     # remove the original tf record to save space
     logger.info(f'Deleting {local_path}')
-    os.remove(local_path)
+    # os.remove(local_path)
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
+    logger = get_module_logger(__name__)
     parser = argparse.ArgumentParser(description='Download and process tf files')
     parser.add_argument('--data_dir', required=True,
-                        help='processed data directory')
-    parser.add_argument('--temp_dir', required=True,
-                        help='raw data directory')
+                        help='data directory')
+    parser.add_argument('--size', required=False, default=100, type=int,
+                        help='Number of files to download')
     args = parser.parse_args()
-    logger = get_module_logger(__name__)
+    data_dir = args.data_dir
+    size = args.size
+
     # open the filenames file
     with open('filenames.txt', 'r') as f:
-        filenames = f.read().splitlines() 
-    logger.info(f'Download {len(filenames)} files. Be patient, this will take a long time.')
-    
-    data_dir = args.data_dir
-    temp_dir = args.temp_dir
+        filenames = f.read().splitlines()
+    logger.info(f'Download {len(filenames[:size])} files. Be patient, this will take a long time.')
+
     # init ray
     ray.init(num_cpus=cpu_count())
-
-    workers = [download_and_process.remote(fn, temp_dir, data_dir) for fn in filenames[:100]]
+    workers = [download_and_process.remote(fn, data_dir) for fn in filenames[:size]]
     _ = ray.get(workers)
