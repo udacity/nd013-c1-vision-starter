@@ -134,7 +134,7 @@ def download_and_process(filename, data_dir):
     process_tfr(local_path, data_dir)
     # remove the original tf record to save space
     logger.info(f'Deleting {local_path}')
-    # os.remove(local_path)
+    os.remove(local_path)
 
 
 if __name__ == "__main__":
