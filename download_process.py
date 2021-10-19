@@ -117,12 +117,15 @@ def process_tfr(path, data_dir):
     writer = tf.python_io.TFRecordWriter(f'{dest}/{file_name}')
     dataset = tf.data.TFRecordDataset(path, compression_type='')
     for idx, data in enumerate(dataset):
-        frame = open_dataset.Frame()
-        frame.ParseFromString(bytearray(data.numpy()))
-        encoded_jpeg, annotations = parse_frame(frame)
-        filename = file_name.replace('.tfrecord', f'_{idx}.tfrecord')
-        tf_example = create_tf_example(filename, encoded_jpeg, annotations)
-        writer.write(tf_example.SerializeToString())
+        # we are only saving every 10 frames to reduce the number of similar
+        # images.
+        if idx % 10 == 0:
+            frame = open_dataset.Frame()
+            frame.ParseFromString(bytearray(data.numpy()))
+            encoded_jpeg, annotations = parse_frame(frame)
+            filename = file_name.replace('.tfrecord', f'_{idx}.tfrecord')
+            tf_example = create_tf_example(filename, encoded_jpeg, annotations)
+            writer.write(tf_example.SerializeToString())
     writer.close()
 
 

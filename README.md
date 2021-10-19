@@ -40,7 +40,7 @@ Follow [the README therein](./build/README.md) to create a docker container and 
 
 In the classroom workspace, every library and package should already be installed in your environment. You will not need to make use of `gcloud` to download the images.
 
-## Instructions
+## Project Walkthrough
 
 ### Download and process the data
 
