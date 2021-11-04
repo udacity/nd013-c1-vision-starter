@@ -118,7 +118,8 @@ def process_tfr(path, data_dir):
     dataset = tf.data.TFRecordDataset(path, compression_type='')
     for idx, data in enumerate(dataset):
         # we are only saving every 10 frames to reduce the number of similar
-        # images.
+        # images. Remove this line if you have enough space to work with full
+        # temporal resolution data.
         if idx % 10 == 0:
             frame = open_dataset.Frame()
             frame.ParseFromString(bytearray(data.numpy()))
