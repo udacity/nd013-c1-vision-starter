@@ -112,7 +112,8 @@ Once the training is finished, launch the evaluation process:
 python experiments/model_main_tf2.py --model_dir=experiments/reference/ --pipeline_config_path=experiments/reference/pipeline_new.config --checkpoint_dir=experiments/reference/
 ```
 
-**Note**: Both processes will display some Tensorflow warnings, which can be ignored. The eva
+**Note**: Both processes will display some Tensorflow warnings, which can be ignored. You may have to kill the evaluation script manually using
+`CTRL+C`.
 
 To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir experiments/reference/`. You will report your findings in the writeup.
 
