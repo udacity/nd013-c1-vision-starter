@@ -112,16 +112,9 @@ Once the training is finished, launch the evaluation process:
 python experiments/model_main_tf2.py --model_dir=experiments/reference/ --pipeline_config_path=experiments/reference/pipeline_new.config --checkpoint_dir=experiments/reference/
 ```
 
-NOTE:
+**Note**: Both processes will display some Tensorflow warnings, which can be ignored. The eva
 
-a. Both processes will display some Tensorflow warnings, which can be ignored.
-b. Manually stop the evaluation process (Ctrl + C), when you see the following message printed on the console:
-```
-INFO:tensorflow:Waiting for new checkpoint at training/reference/
-I1103 12:35:47.849018 140687488190208 checkpoint_utils.py:125] Waiting for new checkpoint at training/reference/
-```
-
-To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir training/reference/`. You will report your findings in the writeup.
+To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir experiments/reference/`. You will report your findings in the writeup.
 
 ### Improve the performances
 
@@ -131,20 +124,22 @@ Keep in mind that the following are also available:
 * experiment with the optimizer: type of optimizer, learning rate, scheduler etc
 * experiment with the architecture. The Tf Object Detection API [model zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) offers many architectures. Keep in mind that the `pipeline.config` file is unique for each architecture and you will have to edit it.
 
+**Important:** If you are working on the workspace, your storage is limited. You may to delete the checkpoints files after each experiment. You should however keep the `tf.events` files located in the `train` and `eval` folder of your experiments. You can also keep the `saved_model` folder to create your videos.
+
 
 ### Creating an animation
 #### Export the trained model
 Modify the arguments of the following function to adjust it to your models:
 
 ```
-python experiments/exporter_main_v2.py --input_type image_tensor --pipeline_config_path experiments/reference/pipeline_new.config --trained_checkpoint_dir experiments/reference/ --output_directory experiments/reference/
+python experiments/exporter_main_v2.py --input_type image_tensor --pipeline_config_path experiments/reference/pipeline_new.config --trained_checkpoint_dir experiments/reference/ --output_directory experiments/reference/exported/
 ```
 
 This should create a new folder `experiments/reference/saved_model`. You can read more about the Tensorflow SavedModel format [here](https://www.tensorflow.org/guide/saved_model).
 
 Finally, you can create a video of your model's inferences for any tf record file. To do so, run the following command (modify it to your files):
 ```
-python inference_video.py --labelmap_path label_map.pbtxt --model_path experiments/reference/saved_model --tf_record_path /data/waymo/testing/segment-12200383401366682847_2552_140_2572_140_with_camera_labels.tfrecord --config_path experiments/reference/pipeline_new.config --output_path animation.gif
+python inference_video.py --labelmap_path label_map.pbtxt --model_path experiments/reference/exported/saved_model --tf_record_path /data/waymo/testing/segment-12200383401366682847_2552_140_2572_140_with_camera_labels.tfrecord --config_path experiments/reference/pipeline_new.config --output_path animation.gif
 ```
 
 ## Submission Template
