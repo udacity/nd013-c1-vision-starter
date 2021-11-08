@@ -71,10 +71,9 @@ Keep in mind that you should refer to this analysis to create the different spit
 
 
 ### Create the training - validation splits
-In the class, we talked about cross-validation and the importance of creating meaningful training and validation splits. For this project, you will have to create your own using the files located in `/data/waymo/training_and_validation/`. Edit the `split` function in the `create_splits.py` file to do the following:
-* copy the files from `/data/waymo/training_and_validation` to `/home/workspace/data/`
-* create two subfolders: `/home/workspace/data/train/` and `/home/workspace/data/val/`
-* split the tf records files between these two folders.
+In the class, we talked about cross-validation and the importance of creating meaningful training and validation splits. For this project, you will have to create your own training and validation sets using the files located in `/home/workspace/data/waymo`. The `split` function in the `create_splits.py` file does the following:
+* create three subfolders: `/home/workspace/data/train/`, `/home/workspace/data/val/`, and `/home/workspace/data/test/`
+* split the tf records files between these three folders by symbolically linking the files from `/home/workspace/data/waymo/` to `/home/workspace/data/train/`, `/home/workspace/data/val/`, and `/home/workspace/data/test/`
 
 Use the following command to run the script once your function is implemented:
 ```
