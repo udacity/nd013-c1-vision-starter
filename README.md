@@ -10,13 +10,14 @@ For this project, we will be using data from the [Waymo Open dataset](https://wa
 
 ### Data
 
-The data you will use for training, validation and testing is organized as follow:
+The data you will use for training, validation and testing is present in:
 ```
-/data/waymo/
-    - /training_and_validation/ - contains 97 files to train and validate your models
-    - /testing/ - contains 3 files to test your model and create inference videos
+/home/workspace/data/waymo/ - symbolically linked to /data/waymo/ (which is a READ ONLY external disk drive)
+/home/workspace/data/train/ - empty to start
+/home/workspace/data/val/ - empty to start
+/home/workspace/data/test/ - empty to start
 ```
-The `training_and_validation` folder contains file that have been downsampled: we have selected one every 10 frames from 10 fps videos. The `testing` folder contains frames from the 10 fps video without downsampling.
+You will split this data into `train`, `val`, and `test` sets by executing the `create_splits.py` file.
 
 
 ### Experiments
@@ -43,12 +44,6 @@ For local setup if you have your own Nvidia GPU, you can use the provided Docker
 
 Follow [the README therein](./build/README.md) to create a docker container and install all prerequisites.
 
-### Classroom Workspace
-
-In the classroom workspace, every library and package should already be installed in your environment. You will NOT need to make use of `gcloud` to download the images.
-
-## Instructions
-
 ### Download and process the data
 
 **Note:** ”If you are using the classroom workspace, we have already completed the steps in the section for you. You can find the downloaded and processed files within the `/home/workspace/data/preprocessed_data/` directory. Check this out then proceed to the **Exploratory Data Analysis** part.
@@ -62,10 +57,15 @@ python download_process.py --data_dir {processed_file_location} --size {number o
 
 You are downloading 100 files (unless you changed the `size` parameter) so be patient! Once the script is done, you can look inside your `data_dir` folder to see if the files have been downloaded and processed correctly.
 
+### Classroom Workspace
+
+In the classroom workspace, every library and package should already be installed in your environment. You will NOT need to make use of `gcloud` to download the images.
+
+## Instructions
 
 ### Exploratory Data Analysis
 
-Now that you have downloaded and processed the data, you should explore the dataset! This is the most important task of any machine learning project. To do so, open the `Exploratory Data Analysis` notebook. In this notebook, your first task will be to implement a `display_instances` function to display images and annotations using `matplotlib`. This should be very similar to the function you created during the course. Once you are done, feel free to spend more time exploring the data and report your findings. Report anything relevant about the dataset in the writeup.
+You should use the data already present in `/home/workspace/data/waymo` directory to explore the dataset! This is the most important task of any machine learning project. To do so, open the `Exploratory Data Analysis` notebook. In this notebook, your first task will be to implement a `display_instances` function to display images and annotations using `matplotlib`. This should be very similar to the function you created during the course. Once you are done, feel free to spend more time exploring the data and report your findings. Report anything relevant about the dataset in the writeup.
 
 Keep in mind that you should refer to this analysis to create the different spits (training, testing and validation).
 
@@ -78,24 +78,18 @@ In the class, we talked about cross-validation and the importance of creating me
 
 Use the following command to run the script once your function is implemented:
 ```
-python create_splits.py --data-dir /data/waymo/training_and_validation/
+python create_splits.py --data-dir /home/workspace/data
 ```
-
-The `/home/workspace/data/train/` and the `/home/workspace/data/val/` should contain a total of 97 files. You do not need to copy the files from
-the `/data/waymo/testing/` folder.
-
-**Import**: The data located in `/data/waymo/` is read-only. You will not be able to MOVE the files from this folder but only to COPY them.
-
 
 ### Edit the config file
 
 Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf).
 
-First, let's download the [pretrained model](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to `/home/workspace/experiments/pretrained-models/`.
+First, let's download the [pretrained model](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to `/home/workspace/experiments/pretrained_model/`.
 
 We need to edit the config files to change the location of the training and validation files, as well as the location of the label_map file, pretrained weights. We also need to adjust the batch size. To do so, run the following:
 ```
-python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/workspace/data/val/ --batch_size 2 --checkpoint /home/workspace/experiments/pretrained_model/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map label_map.pbtxt
+python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/workspace/data/val/ --batch_size 2 --checkpoint /home/workspace/experiments/pretrained_model/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map /home/workspace/experiments/label_map.pbtxt
 ```
 A new config file has been created, `pipeline_new.config`.
 
