@@ -10,14 +10,17 @@ For this project, we will be using data from the [Waymo Open dataset](https://wa
 
 ### Data
 
-The data you will use for training, validation and testing is present in:
+The data you will use for training, validation and testing is organized as follow:
 ```
-/home/workspace/data/waymo/ - symbolically linked to /data/waymo/ (which is a READ ONLY external disk drive)
-/home/workspace/data/train/ - empty to start
-/home/workspace/data/val/ - empty to start
-/home/workspace/data/test/ - empty to start
+/home/workspace/data/waymo
+	- training_and_validation - contains 97 files to train and validate your models
+    - train: contain the train data (empty to start)
+    - val: contain the val data (empty to start)
+    - test - contains 3 files to test your model and create inference videos
 ```
-You will split this data into `train`, `val`, and `test` sets by executing the `create_splits.py` file.
+The `training_and_validation` folder contains file that have been downsampled: we have selected one every 10 frames from 10 fps videos. The `testing` folder contains frames from the 10 fps video without downsampling.
+```
+You will split this `training_and_validation` data into `train`, and `val` sets by completing and executing the `create_splits.py` file.
 
 
 ### Experiments
@@ -31,10 +34,9 @@ experiments/
     - experiment0/ - create a new folder for each experiment you run
     - experiment1/ - create a new folder for each experiment you run
     - experiment2/ - create a new folder for each experiment you run
+    - label_map.pbtxt
     ...
 ```
-This is where you will train your model and store the logs and weights of your experiments.
-
 
 ## Prerequisites
 
@@ -129,7 +131,7 @@ Modify the arguments of the following function to adjust it to your models:
 python experiments/exporter_main_v2.py --input_type image_tensor --pipeline_config_path experiments/reference/pipeline_new.config --trained_checkpoint_dir experiments/reference/ --output_directory experiments/reference/exported/
 ```
 
-This should create a new folder `experiments/reference/saved_model`. You can read more about the Tensorflow SavedModel format [here](https://www.tensorflow.org/guide/saved_model).
+This should create a new folder `experiments/reference/exported/saved_model`. You can read more about the Tensorflow SavedModel format [here](https://www.tensorflow.org/guide/saved_model).
 
 Finally, you can create a video of your model's inferences for any tf record file. To do so, run the following command (modify it to your files):
 ```
