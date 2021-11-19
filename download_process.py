@@ -117,12 +117,16 @@ def process_tfr(path, data_dir):
     writer = tf.python_io.TFRecordWriter(f'{dest}/{file_name}')
     dataset = tf.data.TFRecordDataset(path, compression_type='')
     for idx, data in enumerate(dataset):
-        frame = open_dataset.Frame()
-        frame.ParseFromString(bytearray(data.numpy()))
-        encoded_jpeg, annotations = parse_frame(frame)
-        filename = file_name.replace('.tfrecord', f'_{idx}.tfrecord')
-        tf_example = create_tf_example(filename, encoded_jpeg, annotations)
-        writer.write(tf_example.SerializeToString())
+        # we are only saving every 10 frames to reduce the number of similar
+        # images. Remove this line if you have enough space to work with full
+        # temporal resolution data.
+        if idx % 10 == 0:
+            frame = open_dataset.Frame()
+            frame.ParseFromString(bytearray(data.numpy()))
+            encoded_jpeg, annotations = parse_frame(frame)
+            filename = file_name.replace('.tfrecord', f'_{idx}.tfrecord')
+            tf_example = create_tf_example(filename, encoded_jpeg, annotations)
+            writer.write(tf_example.SerializeToString())
     writer.close()
 
 
@@ -134,7 +138,7 @@ def download_and_process(filename, data_dir):
     process_tfr(local_path, data_dir)
     # remove the original tf record to save space
     logger.info(f'Deleting {local_path}')
-    # os.remove(local_path)
+    os.remove(local_path)
 
 
 if __name__ == "__main__":
