@@ -1,0 +1,115 @@
+Waymo Dataset License Agreement for Non-Commercial Use (July 2019)
+
+To aid the research community in making advancements in machine perception and
+self-driving technology, Waymo has opened up to the public a curated set of
+self-driving data that can be used for research. The dataset, located at
+waymo.com/open, is made available free of charge, but under the terms and
+conditions below. The dataset contains lidar and camera data, which were
+collected in diverse conditions, modified to respect individuals’ privacy, and
+labeled and formatted to aid in research. We hope you find it useful.
+
+By downloading or using the Dataset, You are agreeing to the following terms and
+conditions (“Terms”):
+
+“Dataset” means the Waymo Open Dataset available at waymo.com/open and any data
+in the Waymo Open Dataset.
+
+“Derivative IP” means any derivative work of the Dataset; any other work made or
+developed using the Dataset; and any invention conceived or reduced to
+practice, directly or indirectly, through the use of the Dataset.
+
+“Non-commercial Purposes” means research, teaching, scientific publication and
+personal experimentation. Non-commercial Purposes include use of the Dataset to
+perform benchmarking for purposes of academic or applied research publication.
+Non-commercial Purposes does not include purposes primarily intended for or
+directed towards commercial advantage or monetary compensation, or purposes
+intended for or directed towards litigation, licensing, or enforcement, even in
+part.
+
+“Production Systems” means computer, network, and datacenter infrastructure, and
+other systems primarily intended to provide a product or service to customers
+or other third parties, even if no monetary compensation is received for such a
+service.
+
+“Waymo” means Waymo LLC.
+
+“You” means the individual or entity exercising the rights granted under this
+License Agreement.
+
+Waymo grants You a non-exclusive, royalty-free, personal license to use,
+reproduce, and modify the Dataset for Non-commercial Purposes only and expressly
+subject to the following conditions:
+1. Attribution: You must provide one of the following attributions in any
+Derivative IP:
+
+This [type of work, e.g., publication, software, model] was made using the
+Waymo Open Dataset, provided by Waymo LLC under license terms available at
+waymo.com/open.
+
+@misc{waymo_open_dataset,
+  title = {Waymo Open Dataset: An autonomous driving dataset},
+  website = {\url{https://www.waymo.com/open}},
+  year = {2019}
+}
+
+2. Sharing: Subject to these Terms, you may share as follows: (a) De Minimis:
+You may publish small extracts of data taken from the Dataset for purposes of
+illustration in Your research publications; (b) Untrained Models Architectures:
+You may publish algorithms and untrained model architectures developed using
+the Dataset; and (c) Community Distribution Only: You may distribute the
+Dataset and copies and modifications thereof, but only if (i) distribution is
+limited to those who have registered at waymo.com/open and agreed to these
+Terms and (ii) You agree to agree not to prepare, initiate, assert, or
+otherwise support any claim against Waymo or any authorized licensee of the
+Dataset for violation of any of Your rights protecting the distributed work.
+
+3. Privacy: You may not use the Dataset in any manner that violates applicable
+privacy laws.
+
+4. Additional Restrictions: To ensure the Dataset is only used for
+Non-Commercial Purposes, You further agree (a) not to distribute or publish any
+models trained on or refined using the Dataset, or the weights or biases from
+such trained models, in whole or in part; and (b) not to use or deploy the
+Dataset, any models trained on or refined using the Dataset, or the weights or
+biases from such trained models, in whole or in part, (i) in operation of a
+vehicle or to assist in the operation of a vehicle, (ii) in any Production
+Systems, or (iii) for any other primarily commercial purposes.
+
+5. Limited Non-Assert: In consideration for access to this Dataset and/or this
+royalty-free license from Waymo, You (also on behalf of Your successors and
+assignees of any rights protecting Your Derivative IP) (a) agree not to
+prepare, initiate, assert, or otherwise support any claim against Waymo or any
+of its affiliates, successors, or assignees, for infringement, misappropriation
+or other violation of any rights protecting Your Derivative IP, and (b) grant
+Waymo and the other parties in (a) above a license to such rights, with such
+license becoming effective only if You breach the obligations of (a).
+
+6. Website Terms: You agree to the Waymo Terms of Service
+(https://waymo.com/terms/) (“ToS”) in connection with your use of the Dataset
+and Waymo’s website, including Sections 9 Indemnification, 10 Disclaimers, and
+11 Limitation of Liability.
+
+7. ADDITIONAL DISCLAIMER AND LIMITATION OF LIABILITY: YOU AGREE THE DATASET AND
+ANY DERIVATIVE IP IS PROVIDED “AS-IS” AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTY, INCLUDING WITHOUT LIMITATION WARRANTIES OF TITLE, MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. TO THE FULLEST EXTENT
+PERMITTED BY LAW, IN NO EVENT SHALL WAYMO AND THE OTHER WAYMO PARTIES, AS
+DEFINED IN THE TOS, BE LIABLE UNDER ANY LEGAL THEORY WITH RESPECT THE DATASET
+AND ANY DERIVATIVE IP, OR YOUR USE OF THE DATASET OR ANY DERIVATIVE IP, FOR ANY
+DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, PUNITIVE, OR SPECIAL
+DAMAGES OR LOST PROFITS.
+
+8. Waymo reserves all rights not expressly granted. If you would like a license
+that allows commercial use of the Dataset, or have any other questions, please
+contact open-dataset@waymo.com.
+
+9. If You fail to comply with these terms, then any rights granted to You
+hereunder terminate automatically and You agree to remove access to and delete
+the Dataset.
+
+If the institution You identify at registration or another entity exercises the
+rights granted under this License Agreement by virtue of Your download or use of
+the Dataset, You represent and warrant that: (a) You are authorized to agree to
+this license agreement on behalf of the entity or (b) You have confirmed that a
+person with authority to agree to this license agreement on behalf of the entity
+has already registered on behalf of the entity.
