@@ -35,6 +35,11 @@ def split(source, destination):
     validation_files = []
     testing_files = []
 
+    # Shuffle files
+    random.shuffle(filtered_files)
+    random.shuffle(list_of_dark_files)
+    random.shuffle(list_of_rainy_files)
+
     # 75% for training, 15% for validation, 10% testing
     
     # filtered files
