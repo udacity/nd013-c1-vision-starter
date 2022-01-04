@@ -146,9 +146,15 @@ This section should contain a brief description of the project and what we are t
 ### Set up
 This section should contain a brief description of the steps to follow to run the code for this repository.
 
+Setup was not required as the Udacity Virtual Machine has all necessary dependencies and extensions were already installed.
+
 ### Dataset
 #### Dataset analysis
 This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+The Waymo Open Dataset was used to train a neural network model. The data within the virtual machine contains 97 tfrecord files. Each tfrecord file contains 1 frame per 10 seconds from a 10 fps video. The images are annotated bounding boxes for vehicles, pedestrians and cyclists.
+
+The images within the tfrecord file have distinct attributes including light condition (sunny/overcast), time of day (day/night/dusk) locations(residential/highways/countryside), weather(rainy/foggy/overcast) and density of tracked classes(high/medium/low). Following are a few examples of the images within the tfrecord files.
+
 #### Cross validation
 This section should detail the cross validation strategy and justify your approach.
 
