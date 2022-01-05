@@ -156,7 +156,7 @@ The Waymo Open Dataset was used to train a neural network model. The data within
 The images within the tfrecord file have distinct attributes including light condition (sunny/overcast), time of day (day/night/dusk) locations(residential/highways/countryside), weather(rainy/foggy/overcast) and density of tracked classes(high/medium/low). Following are a few examples of the images within the tfrecord files.
 
 #### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+80% of the datasets was split for training, 20% for validation, and 3 datasets for testing. In order to properly training the neural network, the image based dataset is randomly shuffled for cross validation. 
 
 ### Training
 #### Reference experiment
