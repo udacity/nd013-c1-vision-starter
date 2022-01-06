@@ -141,26 +141,81 @@ python inference_video.py --labelmap_path label_map.pbtxt --model_path experimen
 ## Submission Template
 
 ### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+Object Detection for self-driving cars is an important task for autonomous navigation. The embedded software must be accurate and reliable for real-time computer vision image processing. In this project, we will build a Convolutional Neural Network (CNN) containing multiple layers that filter and map pixels. The image will pass through a series of convolution layers that compare small squares of input data from the image to detect 3 classes: vehicles, pedestrians, and cyclists using the Waymo Open Datset. The preprocessed data is provided in the Udacity workspace: /home/workspace/data/waymo/training_and_validation. The test data contains 3 tfrecord files the location: /home/workspace/data/waymo/test. The project explores splitting data for an efficient model and visualizing object detection with bounding boxes. The Waymo Open Dataset contains a diverse set of images to be visualized in different weather conditions and scenerios.
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
-
-Setup was not required as the Udacity Virtual Machine has all necessary dependencies and extensions were already installed.
+Please follow the readme instructions for local setup. The Udacity Virtual Machine has all the necessary dependencies and extensions installed.
 
 ### Dataset
 #### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-The Waymo Open Dataset was used to train a neural network model. The data within the virtual machine contains 97 tfrecord files. Each tfrecord file contains 1 frame per 10 seconds from a 10 fps video. The images are annotated bounding boxes for vehicles, pedestrians and cyclists.
+The Waymo Open Dataset was used to train a neural network model. The data within the Udacity classroom has 97 tfrecord available for training. These tfrecord files contain 1 frame per 10 seconds from a 10fps video. These images are annotated bounding boxes for 3 classes (vehicles, pedestrian, cyclists). The images from the tfrecord include:
 
-The images within the tfrecord file have distinct attributes including light condition (sunny/overcast), time of day (day/night/dusk) locations(residential/highways/countryside), weather(rainy/foggy/overcast) and density of tracked classes(high/medium/low). Following are a few examples of the images within the tfrecord files.
+*(Rainy)*
+![obj6](https://user-images.githubusercontent.com/22205974/148433196-71afebd1-064c-4e8a-a67c-6d4c4975c1f1.PNG)
+*(Sunny)*
+![obj3](https://user-images.githubusercontent.com/22205974/148440152-59e9a62e-ff26-4c21-9664-fae2caa7576a.PNG)
+*(Night)*
+![obj2](https://user-images.githubusercontent.com/22205974/148436268-2f6b841e-640e-4d81-91df-f308e9c0f6c8.PNG)
+
+*(Low tracked class densities)*
+![obj4](https://user-images.githubusercontent.com/22205974/148440118-9c946687-fa07-45cd-837e-13b740099561.PNG)
+
+*(Med tracked class densities)*
+![obj7](https://user-images.githubusercontent.com/22205974/148440056-0b952f87-64aa-4066-be93-bfd3b3e827c3.PNG)
+
+*(High tracked class densities)*
+![obj8](https://user-images.githubusercontent.com/22205974/148439342-00718794-2b5a-4da7-8a3d-37ca2f5b5adc.PNG)
+
+
+The Single Shot Detector Model is an object detection algorithm that was used to train the Waymo Open Dataset. This model detected 3 classes from the dataset: vehicles, pedestrians, and cyclist. The frequency distribution of these classes are based on the analysis of 1000 and 10,000 shuffled images in the training dataset. In 1,000 images 76% of vehicles, 24% of pedestrians and less that 1% were cyclists were tracked. This produced very few shuffled images containing cyclists.
+
+![fd1000](https://user-images.githubusercontent.com/22205974/148423059-865c08dc-169a-41b8-9298-9fa36d5aa178.PNG)
+
+In 10,000 images 75% of vehicles, 24% of pedestrians and 1% were cyclists were tracked. This increseased the number of cyclists tracked from the dataset.
+
+![fd10000](https://user-images.githubusercontent.com/22205974/148423800-3efc61d5-0f4b-47ca-a478-73ad650e03e4.PNG)
+
 
 #### Cross validation
-80% of the datasets was split for training, 20% for validation, and 3 datasets for testing. In order to properly training the neural network, the image based dataset is randomly shuffled for cross validation. 
+97 tfrecord files were split 85:15, 82 files for training and 15 files for validation. The testing file contains 3 tfrecord file preloaded into the Udacity workspace. In order to properly train the neural network the image were shuffled for cross validation. The create_splits.py shuffles the files before splitting the dataset. Shuffling the data helps the algorithm avoid any bias due to the order of the data was assembled. These bias would cause the algorithm, to visualize patterns read from the previous images that may not be in the following images and  this would cause overfitting.
 
 ### Training
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+The Single Shot Detector (SSD) Resnet 50 model was used to pretrain our dataset. Epoch help to visual overfitting. The learning rate, on the initial experiment resulted in a low learning rate
+
+![learnrate](https://user-images.githubusercontent.com/22205974/148449119-b4fc11e9-d4bf-4dbc-8313-4e5f704d107e.png)
+
+As the number of epochs increases the more the weights are changed in the neural network and goes from underfitting to an desired result or overfitting. 
+
+![cap1](https://user-images.githubusercontent.com/22205974/148436976-da0253d4-05b6-4f34-a628-cda022ad1568.PNG)
+![cap2](https://user-images.githubusercontent.com/22205974/148436998-034e2e3d-14c0-4b45-98f1-cb96f55bf6f3.PNG)
+![cap3](https://user-images.githubusercontent.com/22205974/148437017-89dc2b3c-9215-462f-b496-9b4907b05663.PNG)
+
+The model starts to over fit when the training set accuracy is increasing and the test set accuracy is decreasing.The models prediction, loss:0.1299, accuracy: 0.9505, val_loss: 0.4567 -val_accuracy:0.8974
+
+![epoch](https://user-images.githubusercontent.com/22205974/148437086-3808093e-93f5-4bfe-b496-0f690cd4d809.PNG)
+
+
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+Augmenting images improves the models performance. 
+
+The following aumentations were applied:
+The image was flipped (random_horizontal_flip) This presents a mirrored image that helps to train the model to recognize objects in the opposite direction.
+
+![augflip](https://user-images.githubusercontent.com/22205974/148433919-03d39f1a-3023-4fd6-90c0-f493956e10e7.PNG)
+
+The image was converted into grayscale (random_rgb_to_gray) 0.02 probability. RGB images need 24 bits for processing while grayscale only needs 8bits to process. Grayscale provides faster processing times and helps with feature distinction.
+
+![grayaug](https://user-images.githubusercontent.com/22205974/148433944-a69bbeac-a30a-46f0-9bff-3241669e0251.PNG)
+
+The image was converted to adjust the brightness adjust by delta 0.3. Over exposure to light can make it harder for the model to distingush the objects features.
+
+![obj5](https://user-images.githubusercontent.com/22205974/148433969-c37d2749-0604-4b47-9f79-09df4dd7865c.PNG)
+
+The image was converted to adjust the contrast of the images to make it darker to train the model. Training the model with darker images can provide a better model for object  recognition in darker images.
+
+![aug1](https://user-images.githubusercontent.com/22205974/148454948-1aa0089b-9e6e-413a-8d47-9a00805d60ac.PNG)
+
+
+
