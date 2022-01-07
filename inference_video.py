@@ -8,7 +8,8 @@ from matplotlib import animation
 
 from object_detection.builders.dataset_builder import build as build_dataset
 from object_detection.utils.config_util import get_configs_from_pipeline_file
-from object_detection.utils.label_map_util import create_category_index_from_labelmap
+from object_detection.utils.label_map_util \
+    import create_category_index_from_labelmap
 from object_detection.utils import visualization_utils as viz_utils
 
 from utils import get_module_logger
@@ -64,11 +65,12 @@ def main(labelmap_path, model_path, tf_record_path, config_path, output_path):
         # tensor -> numpy arr, remove one dimensions
         num_detections = int(detections.pop('num_detections'))
         detections = {key: value[0, ...].numpy()
-                    for key, value in detections.items()}
+                      for key, value in detections.items()}
         detections['num_detections'] = num_detections
 
         # detection_classes should be ints.
-        detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
+        detections['detection_classes'] = \
+            detections['detection_classes'].astype(np.int64)
 
         image_np_with_detections = \
             viz_utils.visualize_boxes_and_labels_on_image_array(
@@ -85,7 +87,12 @@ def main(labelmap_path, model_path, tf_record_path, config_path, output_path):
 
     # now we can create the animation
     f = plt.figure()
-    f.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=None, hspace=None)
+    f.subplots_adjust(left=0,
+                      bottom=0,
+                      right=1,
+                      top=1,
+                      wspace=None,
+                      hspace=None)
     ax = plt.subplot(111)
     ax.axis('off')
     im_obj = ax.imshow(images[0])
@@ -103,7 +110,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Create video')
     parser.add_argument('--labelmap_path', required=True, type=str,
-                help='path to the label map')
+                        help='path to the label map')
     parser.add_argument('--model_path', required=True, type=str,
                         help='path to the saved model folder')
     parser.add_argument('--tf_record_path', required=True, type=str,
