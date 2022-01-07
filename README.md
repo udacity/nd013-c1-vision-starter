@@ -138,6 +138,16 @@ The images are annotated with 3 classes: pedestrian, vehicle and cyclist. Howeve
 
 As shown in the graph, the number of vehicles severely outweighs that of the pedestrians and the cyclists. There is a very low number of cyclists, relative to the other classes. This inequality is likely to negatively impact the training and lead to poor generalisation.
 
+The mean pixel value of each of the images was also investigated. The following figure shows that the mean pixel values are normally distributed, rather than being uniformly distributed. This may be an indicator that the majority of the photos have average lighting and only a few photos are on the brighter and the darker ends of the spectrum. As a results, the model may generalise poorly in different lighting conditions.
+
+<p float="left" align="middle">
+  <img src="images/pixel_dist.png" />
+</p>
+
+Finally, 1 image from each of the 100 files was visualised to get a sense of the variability in the environment. The images are not included here, but they can be viewed in `Exploratory Data Analysis.ipnyb`. There are some noteworthy observations from this visualisation:
+1. Only 8 files contained dark scenes.
+2. Only 11 files contained rainy scenes.
+3. The rest of the 81 files contained scenes with mostly clear skies and daylight.
 
 
 ---
