@@ -19,10 +19,12 @@ def split(source, destination):
         - destination [str]: destination data directory, contains 3 sub
                              folders: train / val / test
     """
+    # Import the names of files containing dark scenes
     with open('dark_files.txt') as file:
         list_of_dark_files = file.readlines()
         list_of_dark_files = [line.rstrip() for line in list_of_dark_files]
 
+    # Import the names of files containing rainy scenes
     with open('rainy_files.txt') as file:
         list_of_rainy_files = file.readlines()
         list_of_rainy_files = [line.rstrip() for line in list_of_rainy_files]
@@ -31,6 +33,8 @@ def split(source, destination):
 
     list_of_all_files = [os.path.basename(x)
                          for x in glob.glob(source + '/*.tfrecord')]
+
+    # List of files that are not dark or rainy
     filtered_files = [file for file in list_of_all_files
                       if file not in combined_list_of_special_files]
 
@@ -45,7 +49,7 @@ def split(source, destination):
 
     # 75% for training, 15% for validation, 10% testing
 
-    # filtered files
+    # normal files
     idx_of_75_perct = int(len(filtered_files) * 0.75)
     idx_of_90_perct = int(len(filtered_files) * 0.9)
     training_files += filtered_files[0:idx_of_75_perct]
