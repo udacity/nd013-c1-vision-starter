@@ -3,7 +3,7 @@
 ### Project overview
 **_Note: This is a submission for the Object Detection in an Urban Environment project, which is part of the [Udacity Self Driving Car Engineer Nano Degree](https://www.udacity.com/course/self-driving-car-engineer-nanodegree--nd0013)._**
 
-Object detection in urban environments is critical for self-driving cars, because it allows the car to understand its surrounding and plan accordingly. For example, the car may slow down after detecting a pedestrian at a crossing or apply emergency breaks if detects another vehicle on a collision course.
+Object detection in urban environments is critical for self-driving cars, because it allows the car to understand its surrounding and plan accordingly. For example, the car may slow down after detecting a pedestrian at a crossing or apply emergency breaks if it detects that it is on a collision course with another vehicle.
 
 This project uses Tensorflow to train a machine learning model on samples from the [Waymo Open Dataset](https://waymo.com/open/). The projects covers:
 
@@ -39,20 +39,19 @@ inference_video.py - used to create a video of the model in action
 utils.py - various convenience functions
 Exploratory Data Analysis.ipynb - an analysis of the dataset
 Explore augmentations.ipynb - used to visualise the augmentations in a given configuration file
-filenames.txt - a list of all the dataset file names
+filenames.txt - a list of all the dataset files' names
 dark_files.txt - a list of the files containing dark scenes
 rainy_files.txt - a list of the files containing rainy scenes
 ...
 ```
 
 #### Environment Setup
-Follow the instructions in `build/README.md` to set up the docker container with the required packages. The following instructions should be executed from within the container.
+Follow the instructions in `build/README.md` to set up the docker container with the required packages. **The following instructions should be executed from within the container.**
 
 #### Downloading and processing the data
 Run the following command to download and process the data:
 ```
 python download_process.py --data_dir {processed_file_location} --size {number of files you want to download}
-
 ```
 
 #### Creating the splits
@@ -60,12 +59,13 @@ To create the splits, run the following command:
 ```
 python create_splits.py --data-dir data/
 ```
+Note that the splits are based on the files in `dark_files.txt` and `rainy_files.txt`. The rationale behind the splits is covered later in this document.
 
 #### Downloading and configuring a pretrained model
 The project assumes that a pretrained model will be used as the starting point. To use the SSD Resnet 50 640x640 model:
 
 1. Download the model from this [link](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz).
-2. Extract the model under pretrained-models, such that it matches the following hierarchy:
+2. Extract the model under `pretrained-models/`, such that it matches the following hierarchy:
 ```
 ...
 experiments/
@@ -124,6 +124,23 @@ tensorboard --logdir=experiments/training
 
 ### Dataset
 #### Dataset analysis
+The dataset contains 1997 images in various day and weather conditions:
+<p float="left" align="middle">
+  <img src="images/sample_1.png" width="300" />
+  <img src="images/sample_2.png" width="300" /> 
+  <img src="images/sample_3.png" width="300" />
+</p>
+
+The images are annotated with 3 classes: pedestrian, vehicle and cyclist. However, these classes are not equally represented in the dataset:
+<p float="left" align="middle">
+  <img src="images/class_dist.png" />
+</p>
+
+As shown in the graph, the number of vehicles severely outweighs that of the pedestrians and the cyclists. There is a very low number of cyclists, relative to the other classes. This inequality is likely to negatively impact the training and lead to poor generalisation.
+
+
+
+---
 This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
 #### Cross validation
 This section should detail the cross validation strategy and justify your approach.
