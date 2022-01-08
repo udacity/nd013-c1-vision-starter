@@ -246,3 +246,18 @@ The table below summaries the results of the 3 experiments that had a noticeable
 | Experiment 19 | 0.03116 | 0.1242 | 0.1808 | 0.6323 | 0.5075 | 0.1048 |
 | Experiment 21 | 0.03817 | 0.168 | 0.2463 | 0.6756 | 0.5705 | 0.1706 |
 
+The graphs from the experiments are more easily viewed [here](https://tensorboard.dev/experiment/jzEyYGJbQy2qxgjUBzF6cQ/#scalars&runSelectionState=eyJleHBlcmltZW50MS9ldmFsIjpmYWxzZSwiZXhwZXJpbWVudDEvdHJhaW4iOmZhbHNlLCJleHBlcmltZW50MTAvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQxMC90cmFpbiI6ZmFsc2UsImV4cGVyaW1lbnQxMi9ldmFsIjpmYWxzZSwiZXhwZXJpbWVudDEyL3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDEzL2V2YWwiOmZhbHNlLCJleHBlcmltZW50MTMvdHJhaW4iOmZhbHNlLCJleHBlcmltZW50MTQvZXZhbCI6dHJ1ZSwiZXhwZXJpbWVudDE0L3RyYWluIjp0cnVlLCJleHBlcmltZW50MTUvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQxNS90cmFpbiI6ZmFsc2UsImV4cGVyaW1lbnQxNi9ldmFsIjpmYWxzZSwiZXhwZXJpbWVudDE2L3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDE3L2V2YWwiOmZhbHNlLCJleHBlcmltZW50MTcvdHJhaW4iOmZhbHNlLCJleHBlcmltZW50MTgvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQxOC90cmFpbiI6ZmFsc2UsImV4cGVyaW1lbnQxOS9ldmFsIjp0cnVlLCJleHBlcmltZW50MTkvdHJhaW4iOnRydWUsImV4cGVyaW1lbnQyL2V2YWwiOmZhbHNlLCJleHBlcmltZW50Mi90cmFpbiI6ZmFsc2UsImV4cGVyaW1lbnQyMC9ldmFsIjpmYWxzZSwiZXhwZXJpbWVudDIwL3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDIxL2V2YWwiOnRydWUsImV4cGVyaW1lbnQyMS90cmFpbiI6dHJ1ZSwiZXhwZXJpbWVudDMvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQzL3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDQvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQ0L3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDUvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQ1L3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDYvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQ2L3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDcvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQ3L3RyYWluIjpmYWxzZSwiZXhwZXJpbWVudDgvZXZhbCI6ZmFsc2UsImV4cGVyaW1lbnQ4L3RyYWluIjpmYWxzZSwicmVmZXJlbmNlL2V2YWwiOnRydWUsInJlZmVyZW5jZS90cmFpbiI6dHJ1ZX0%3D).
+
+**Experiment 14** introduced the gray scale augmentation, visualised below, which proved to be the most effective of all the augmentations that have been tested. This is likely because it removes some of the variations caused by the different lighting conditions. As a result, this experiment performed better than the reference in almost all of the precision and recall metrics.
+
+<p float="left" align="middle">
+  <img src="images/gray_scale.png" />
+</p>
+
+**Experiment 19** Uses the same augmentation from experiment 14 with the addition of an RMSProp Optimiser instead of a Momentum optimiser. Tensorflow's Object Detectin API provides several optimisers, which are documented [here](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/optimizer.proto). The graphs below show that for this experiment (shown in pink), the model initially outperformed that of the reference and experiment 14; however, the performance eventually plateaus and underperforms against the others.
+
+<p float="left" align="middle">
+  <img src="images/results/eval_ref_14_19.png" />
+</p>
+
+**Experiment 21** Extends experiment 14 by using an exponential decay learning rate, rather than a cosine learning rate. More information about learning rates can be found [here](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/optimizer.proto). As shown in the graphs and the results quoted above, this model provides the best performance of all the ones that have been tested.
