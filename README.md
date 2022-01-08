@@ -123,37 +123,73 @@ tensorboard --logdir=experiments/training
 ---
 
 ### Dataset
-#### Dataset analysis
-The dataset contains 1997 images in various day and weather conditions:
+#### Overview
+The dataset contains 1997 images, split across 100 files. Each file contains ~20 images, which are taken from the same journey. These journeys were made in various day and weather conditions as shown in the images below:
 <p float="left" align="middle">
   <img src="images/sample_1.png" width="300" />
   <img src="images/sample_2.png" width="300" /> 
   <img src="images/sample_3.png" width="300" />
 </p>
 
+
+#### Class Distribution Analysis
 The images are annotated with 3 classes: pedestrian, vehicle and cyclist. However, these classes are not equally represented in the dataset:
 <p float="left" align="middle">
   <img src="images/class_dist.png" />
 </p>
 
-As shown in the graph, the number of vehicles severely outweighs that of the pedestrians and the cyclists. There is a very low number of cyclists, relative to the other classes. This inequality is likely to negatively impact the training and lead to poor generalisation.
+As shown in the graph:
+1. Vehicles severely outnumber pedestrians and cyclists.
+2. There is a very low number of cyclists, relative to the other classes.
+   
+This inequality is likely to negatively impact the training and lead to poor generalisation.
 
-The mean pixel value of each of the images was also investigated. The following figure shows that the mean pixel values are normally distributed, rather than being uniformly distributed. This may be an indicator that the majority of the photos have average lighting and only a few photos are on the brighter and the darker ends of the spectrum. As a results, the model may generalise poorly in different lighting conditions.
+
+#### Mean Pixel Value Analysis
+The following figure shows that the mean pixel value of the images is normally distributed, rather than being uniformly distributed. This may be an indicator that the majority of the photos have average lighting and only a few photos are on the brighter and the darker ends of the spectrum. As a result, the model may generalise poorly in different lighting conditions.
 
 <p float="left" align="middle">
   <img src="images/pixel_dist.png" />
 </p>
 
-Finally, 1 image from each of the 100 files was visualised to get a sense of the variability in the environment. The images are not included here, but they can be viewed in `Exploratory Data Analysis.ipnyb`. There are some noteworthy observations from this visualisation:
+
+#### Qualitative Analysis
+One image from each of the 100 files was visualised to get a sense of the variability in the environment. Samples of these conditions are shown below. The complete set of images can be viewed at `images/samples`. There are some noteworthy observations from this visualisation:
 1. Only 8 files contained dark scenes.
 2. Only 11 files contained rainy scenes.
 3. The rest of the 81 files contained scenes with mostly clear skies and daylight.
 
+<p float="left" align="middle"> 
+  <figure>
+    <img src="images/samples/segment-12200383401366682847_2552_140_2572_140_with_camera_labels_20.tfrecord.png"/>
+    <figcaption>Dark Scene</figcaption>
+  </figure>
+
+  <figure>
+    <img src="images/samples/segment-11355519273066561009_5323_000_5343_000_with_camera_labels_20.tfrecord.png"/>
+    <figcaption>Rainy Scene</figcaption>
+  </figure>
+  
+  <figure>
+    <img src="images/samples/segment-11392401368700458296_1086_429_1106_429_with_camera_labels_20.tfrecord.png"/> 
+    <figcaption>Daylight Scene</figcaption>
+  </figure>
+</p>
 
 ---
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+
 #### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+Given the relatively small number of images provided in this dataset, 75%, 15% and 10% of the images were allocated to the training, validation and testing was chosen. A larger share for the training set would have been more ideal; however, that would make the validation results less reliable.
+
+The split was made based on the files, as opposed to combining all the images and randomly allocating them to different sets. This ensured that images from a given journey were only allocated to one set, rather than split between multiple sets. This was done to minimise the chance of overfitting and to ensure that the model generalises well for different journeys/conditions.
+
+Another factor that was taken into account is the fact that there is a very small number of files that contained rainy and/or dark scenes. To minimise the impact of this uneven distribution, files containing rainy and dark scenes were distributed equally amongst the three sets. This was done to minimise overfitting and ensure that the validation and testing results are representative of the whole dataset. 
+
+Based on all of the above, the following strategy was implemented:
+1. Files were split into three lists: files containing dark scenes, files containing rainy scenes and all other files
+2. Each of the three lists was shuffled
+3. 75%, 15% and 10% of each list was allocated to the training, validation and testing sets, respectively 
+
 
 ### Training
 #### Reference experiment
