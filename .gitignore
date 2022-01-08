@@ -6,3 +6,4 @@ checkpoint
 events*
 variables*
 saved_model.pb
+pretrained-models/

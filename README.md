@@ -160,20 +160,9 @@ One image from each of the 100 files was visualised to get a sense of the variab
 3. The rest of the 81 files contained scenes with mostly clear skies and daylight.
 
 <p float="left" align="middle"> 
-  <figure>
-    <img src="images/samples/segment-12200383401366682847_2552_140_2572_140_with_camera_labels_20.tfrecord.png"/>
-    <figcaption>Dark Scene</figcaption>
-  </figure>
-
-  <figure>
-    <img src="images/samples/segment-11355519273066561009_5323_000_5343_000_with_camera_labels_20.tfrecord.png"/>
-    <figcaption>Rainy Scene</figcaption>
-  </figure>
-  
-  <figure>
-    <img src="images/samples/segment-11392401368700458296_1086_429_1106_429_with_camera_labels_20.tfrecord.png"/> 
-    <figcaption>Daylight Scene</figcaption>
-  </figure>
+  <img src="images/samples/segment-12200383401366682847_2552_140_2572_140_with_camera_labels_20.tfrecord.png" width="300"/>
+  <img src="images/samples/segment-11355519273066561009_5323_000_5343_000_with_camera_labels_20.tfrecord.png" width="300"/>
+  <img src="images/samples/segment-11392401368700458296_1086_429_1106_429_with_camera_labels_20.tfrecord.png" width="300"/> 
 </p>
 
 ---
@@ -190,10 +179,71 @@ Based on all of the above, the following strategy was implemented:
 2. Each of the three lists was shuffled
 3. 75%, 15% and 10% of each list was allocated to the training, validation and testing sets, respectively 
 
+---
 
 ### Training
+#### Key
+|   Metric  | Key |
+| --------- | --- |
+| mAP | Mean average precision averaged over IOU thresholds ranging from .5 to .95 with .05 increments |
+| mAP (large) | mAP for large objects: area > 96^2 pixels |
+| mAP (medium) | mAP for medium objects: 32^2 < area < 96^2 pixels |
+| mAP (small) | mAP for small objects: area < 32^2 pixels |
+| AR | Average recall |
+| AR@1 | AR given 1 detection per image |
+| AR@10 | AR given 10 detections per image |
+| AR@100 | AR given 100 detections per image |
+| AR (large) | AR for large objects: area > 96^2 pixels |
+| AR (medium) | AR for medium objects: 32^2 < area < 96^2 pixels |
+| AR (small) | AR for small objects: area < 32^2 pixels |
+
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+At 24,000 steps, the reference model achieved the following metrics on the validation set:
+| mAP | mAP (large) | mAP (medium) | mAP (small) | mAP (@.5 IOU) | mAP (@.75 IOU) |
+|----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+|  0.1595 | 0.5576 | 0.425 | 0.08076 | 0.3217 | 0.1326 |
+
+
+| AR@1 | AR@10 | AR@100 | AR@100 (large) | AR@100 (medium) | AR@100 (small) |
+|------|------|------|------|------|------|
+| 0.03417 | 0.1544 | 0.2399 | 0.6099 | 0.5131 | 0.163 |
+
+The following graphs comapre the performance of the model against the training set (orange) and the validation set (blue). The model appears to overfit the training data, which leads to a higher loss when evaluating the validation set.
+<p float="left" align="middle">
+  <img src="images/results/reference_loss.png" />
+</p>
+
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+Several experiments were conducted to improve the on the reference. The following table summaries the changes (from the reference) made in some of these experiments:
+| Experiment | Changes from reference|
+|------------|-----------------------|
+| Experiment 14 | Augmentation: Randomly convert entire image to grey scale.|
+| Experiment 19 | Augmentation: Randomly convert entire image to grey scale. <br />Optimiser: RMSProp |
+| Experiment 21 | Augmentation: Randomly convert entire image to grey scale. <br />Learning rate: Exponential decay |
+
+Several other experiments were conducted; however, only the above 3 improved the performance of the model. The other experiments included:
+* Removing the existing augmentations (random horizontal flip and random image crop) from the reference.
+* Introducing other augmentations, including: brightness adjustment, black patches insertion, contrast adjustment, noisy patches insertion and image quality variation.
+* Using different optimisers, including Adam optimiser.
+* Using different learning rates, including: manual step and constant learning rates.
+* Modifying the learning rate parameters, including the learning rate base and the warmup learning rate.
+
+For the vast majority of the these other experiments, default parameters were used, so the results do not necessarily indicate that these changes are ineffective.
+
+The table below summaries the results of the 3 experiments that had a noticeable improvement over the reference:
+| Experiment | mAP | mAP (large) | mAP (medium) | mAP (small) | mAP (@.5 IOU) | mAP (@.75 IOU) |
+|------------|----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| Reference  |  0.1595 | 0.5576 | 0.425 | 0.08076 | 0.3217 | 0.1326 |
+| Experiment 14 | 0.1782 | 0.5402 | 0.4679 | 0.09614 | 0.3618 | 0.1508 |
+| Experiment 19 | 0.1207 | 0.558 | 0.3823 | 0.0467 | 0.2614 | 0.103 |
+| Experiment 21 | 0.1807 | 0.6346 | 0.4909 | 0.09231 | 0.3686 | 0.153 |
+
+
+| Experiment | AR@1 | AR@10 | AR@100 | AR@100 (large) | AR@100 (medium) | AR@100 (small) |
+|------|------|------|------|------|------|------|
+| Reference | 0.03417 | 0.1544 | 0.2399 | 0.6099 | 0.5131 | 0.163 |
+| Experiment 14 | 0.03773 | 0.1687 | 0.2504 | 0.6276 | 0.552 | 0.1789 |
+| Experiment 19 | 0.03116 | 0.1242 | 0.1808 | 0.6323 | 0.5075 | 0.1048 |
+| Experiment 21 | 0.03817 | 0.168 | 0.2463 | 0.6756 | 0.5705 | 0.1706 |
+
