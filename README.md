@@ -182,7 +182,6 @@ Based on all of the above, the following strategy was implemented:
 ---
 
 ### Training
-#### Key
 |   Metric  | Key |
 | --------- | --- |
 | mAP | Mean average precision averaged over IOU thresholds ranging from .5 to .95 with .05 increments |
