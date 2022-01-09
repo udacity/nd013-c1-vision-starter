@@ -168,7 +168,7 @@ One image from each of the 100 files was visualised to get a sense of the variab
 ---
 
 #### Cross validation
-Given the relatively small number of images provided in this dataset, 75%, 15% and 10% of the images were allocated to the training, validation and testing was chosen. A larger share for the training set would have been more ideal; however, that would make the validation results less reliable.
+Given the relatively small number of images provided in this dataset, 75%, 15% and 10% of the images were allocated to the training, validation and testing sets, respectively. A larger share for the training set would have been more ideal; however, that would make the validation results less reliable.
 
 The split was made based on the files, as opposed to combining all the images and randomly allocating them to different sets. This ensured that images from a given journey were only allocated to one set, rather than split between multiple sets. This was done to minimise the chance of overfitting and to ensure that the model generalises well for different journeys/conditions.
 
