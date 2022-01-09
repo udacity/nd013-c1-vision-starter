@@ -274,3 +274,5 @@ Several improvements can be made to enhance the model's performance:
 * Provide a much larger dataset and ensure a more even distribution across classes and weather/lighting conditions. This is likely The biggest improvement that can be made to the model, as there are limits to what augmentations and hyperparamter tuning can achieve.
 * Explore different data augmentation strategies. For example, blurring parts of the image may allow the model to better generalise to rainy conditions.
 * Explore the effects of tuning the various data augmentation parameters. This project has mostly used the default values of the data augmentations; however, further improvements may be possible with careful tuning.
+* Explore the effects of tuning hyperparameters, such as base learning rate and batch size.
+* Explore other model architectures.
