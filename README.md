@@ -260,4 +260,17 @@ The graphs from the experiments are more easily viewed [here](https://tensorboar
   <img src="images/results/eval_ref_14_19.png" />
 </p>
 
-**Experiment 21** Extends experiment 14 by using an exponential decay learning rate, rather than a cosine learning rate. More information about learning rates can be found [here](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/optimizer.proto). As shown in the graphs and the results quoted above, this model provides the best performance of all the ones that have been tested.
+**Experiment 21** Extends experiment 14 by using an exponential decay learning rate, rather than a cosine learning rate. More information about learning rates can be found [here](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/optimizer.proto). As shown in the graphs and the results quoted above, this model provides the best performance of all the ones that have been tested. The initial learning rate for this experiments (0.001) is lower than that of the other experiments (O.01).
+
+The following GIF, shows the model's inference:
+<p float="left" align="middle">
+  <img src="images/animation.gif" />
+</p>
+
+In all of the experiments, the final training loss was lower than that of the validation loss, which indicates overfitting to the training data.
+
+#### Further Improvements 
+Several improvements can be made to enhance the model's performance:
+* Provide a much larger dataset and ensure a more even distribution across classes and weather/lighting conditions. This is likely The biggest improvement that can be made to the model, as there are limits to what augmentations and hyperparamter tuning can achieve.
+* Explore different data augmentation strategies. For example, blurring parts of the image may allow the model to better generalise to rainy conditions.
+* Explore the effects of tuning the various data augmentation parameters. This project has mostly used the default values of the data augmentations; however, further improvements may be possible with careful tuning.
