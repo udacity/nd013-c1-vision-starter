@@ -260,7 +260,7 @@ The graphs from the experiments are more easily viewed [here](https://tensorboar
   <img src="images/results/eval_ref_14_19.png" />
 </p>
 
-**Experiment 21** Extends experiment 14 by using an exponential decay learning rate, rather than a cosine learning rate. More information about learning rates can be found [here](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/optimizer.proto). As shown in the graphs and the results quoted above, this model provides the best performance of all the ones that have been tested. The initial learning rate for this experiments (0.001) is lower than that of the other experiments (O.01).
+**Experiment 21** Extends experiment 14 by using an exponential decay learning rate, rather than a cosine learning rate. More information about learning rates can be found [here](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/optimizer.proto). As shown in the graphs and the results quoted above, this model provides the best performance of all the ones that have been tested. The initial learning rate for this experiments (0.001) is lower than that of the other experiments (0.01).
 
 The following GIF, shows the model's inference:
 <p float="left" align="middle">
