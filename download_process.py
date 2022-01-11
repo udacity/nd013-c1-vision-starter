@@ -115,7 +115,9 @@ def process_tfr(path, data_dir):
 
     logger.info(f'Processing {path}')
     writer = tf.python_io.TFRecordWriter(f'{dest}/{file_name}')
+    logger.info(f'1')
     dataset = tf.data.TFRecordDataset(path, compression_type='')
+    logger.info(f'2')
     for idx, data in enumerate(dataset):
         # we are only saving every 10 frames to reduce the number of similar
         # images. Remove this line if you have enough space to work with full
@@ -135,7 +137,9 @@ def download_and_process(filename, data_dir):
     logger = get_module_logger(__name__)
     # need to re-import the logger because of multiprocesing
     local_path = download_tfr(filename, data_dir)
+    logger.info(f'3')
     process_tfr(local_path, data_dir)
+    logger.info(f'4')
     # remove the original tf record to save space
     logger.info(f'Deleting {local_path}')
     os.remove(local_path)
@@ -143,11 +147,14 @@ def download_and_process(filename, data_dir):
 
 if __name__ == "__main__":
     logger = get_module_logger(__name__)
+    os.environ['CUDA_VISIBLE_DEVICES'] = "0"
     parser = argparse.ArgumentParser(description='Download and process tf files')
     parser.add_argument('--data_dir', required=True,
                         help='data directory')
     parser.add_argument('--size', required=False, default=100, type=int,
                         help='Number of files to download')
+    parser.add_argument('--local_dir', required=False, 
+                        help="If files are already downloaded, skip download and operate on local files")
     args = parser.parse_args()
     data_dir = args.data_dir
     size = args.size
