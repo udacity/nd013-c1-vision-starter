@@ -22,7 +22,7 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         ffmpeg \
-	    git \
+        git \
         git-core \
         g++ \
         vim \
@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libfreetype6-dev \
         libhdf5-serial-dev \
         libzmq3-dev \
+        libcairo2-dev \
         pkg-config \
         software-properties-common \
         unzip \
@@ -71,7 +72,8 @@ RUN apt update -y && \
 
 RUN ln -s $(which python3) /usr/local/bin/python
 
-RUN python3 -m pip install tensorflow==2.5.0
+RUN python -m pip install --upgrade pip && \
+    pip install tensorflow==2.5.0 tf-models-official==2.5.1 tensorflow_io==0.19.1 pyparsing==2.4.2 pycairo
 
 WORKDIR /app
 
@@ -91,3 +93,7 @@ RUN git clone https://github.com/tensorflow/models.git && \
     protoc object_detection/protos/*.proto --python_out=. && \
     cp object_detection/packages/tf2/setup.py . && \
     python -m pip install .
+
+# Install google cloud SDK
+RUN curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --install-dir=~/gcloud --disable-prompts
+ENV PATH="$PATH:/root/gcloud/google-cloud-sdk/bin"
