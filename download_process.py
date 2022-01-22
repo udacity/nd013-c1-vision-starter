@@ -74,6 +74,7 @@ def create_tf_example(filename, encoded_jpeg, annotations, resize=True):
     return tf_example
 
 
+@ray.remote
 def download_tfr(filename, data_dir):
     """
     download a single tf record
@@ -85,18 +86,20 @@ def download_tfr(filename, data_dir):
     returns:
         - local_path [str]: path where the file is saved
     """
+    # need to re-import the logger because of multiprocesing
+    logger = get_module_logger(__name__)
     # create data dir
     dest = os.path.join(data_dir, 'raw')
     os.makedirs(dest, exist_ok=True)
 
-    # download the tf record file
-    cmd = ['gsutil', 'cp', filename, f'{dest}']
-    logger.info(f'Downloading {filename}')
-    res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if res.returncode != 0:
-        logger.error(f'Could not download file {filename}')
-
     local_path = os.path.join(dest, os.path.basename(filename))
+    if not os.path.isfile(local_path):
+        # download the tf record file
+        cmd = ['gsutil', 'cp', filename, f'{dest}']
+        logger.info(f'Downloading {filename}')
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if res.returncode != 0:
+            logger.error(f'Could not download file {filename}')
     return local_path
 
 
@@ -112,30 +115,26 @@ def process_tfr(path, data_dir):
     dest = os.path.join(data_dir, 'processed')
     os.makedirs(dest, exist_ok=True)
     file_name = os.path.basename(path)
+    dest_path = os.path.join(dest, file_name)
+    if not os.path.isfile(dest_path):
+        logger.info(f'Processing {path}')
+        writer = tf.python_io.TFRecordWriter(dest_path)
+        dataset = tf.data.TFRecordDataset(path, compression_type='')
+        for idx, data in enumerate(dataset):
+            # we are only saving every 10 frames to reduce the number of similar
+            # images. Remove this line if you have enough space to work with full
+            # temporal resolution data.
+            if idx % 10 == 0:
+                frame = open_dataset.Frame()
+                frame.ParseFromString(bytearray(data.numpy()))
+                encoded_jpeg, annotations = parse_frame(frame)
+                filename = file_name.replace('.tfrecord', f'_{idx}.tfrecord')
+                tf_example = create_tf_example(filename, encoded_jpeg, annotations)
+                writer.write(tf_example.SerializeToString())
+        writer.close()
 
-    logger.info(f'Processing {path}')
-    writer = tf.python_io.TFRecordWriter(f'{dest}/{file_name}')
-    dataset = tf.data.TFRecordDataset(path, compression_type='')
-    for idx, data in enumerate(dataset):
-        # we are only saving every 10 frames to reduce the number of similar
-        # images. Remove this line if you have enough space to work with full
-        # temporal resolution data.
-        if idx % 10 == 0:
-            frame = open_dataset.Frame()
-            frame.ParseFromString(bytearray(data.numpy()))
-            encoded_jpeg, annotations = parse_frame(frame)
-            filename = file_name.replace('.tfrecord', f'_{idx}.tfrecord')
-            tf_example = create_tf_example(filename, encoded_jpeg, annotations)
-            writer.write(tf_example.SerializeToString())
-    writer.close()
 
-
-@ray.remote
-def download_and_process(filename, data_dir):
-    logger = get_module_logger(__name__)
-    # need to re-import the logger because of multiprocesing
-    local_path = download_tfr(filename, data_dir)
-    process_tfr(local_path, data_dir)
+def delete_tfr(local_path):
     # remove the original tf record to save space
     logger.info(f'Deleting {local_path}')
     os.remove(local_path)
@@ -158,6 +157,11 @@ if __name__ == "__main__":
     logger.info(f'Download {len(filenames[:size])} files. Be patient, this will take a long time.')
 
     # init ray
-    ray.init(num_cpus=cpu_count())
-    workers = [download_and_process.remote(fn, data_dir) for fn in filenames[:size]]
-    _ = ray.get(workers)
+    ray.init(num_cpus=cpu_count(), num_gpus=len(tf.config.list_physical_devices('GPU')))
+    downloads = [download_tfr.remote(fn, data_dir) for fn in filenames[:size]]
+    while len(downloads):
+        done_ids, downloads = ray.wait(downloads)
+        for done_id in done_ids:
+            local_path = ray.get(done_id)
+            process_tfr(local_path, data_dir)
+            delete_tfr(local_path)
