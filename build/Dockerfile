@@ -90,6 +90,7 @@ ENV PATH "$PATH:/app/protobuf/bin"
 
 RUN git clone https://github.com/tensorflow/models.git && \
     cd /app/models/research/ && \
+    git checkout e5e8bf3c3753d50230f567452d4dbf49951d9c40 && \
     protoc object_detection/protos/*.proto --python_out=. && \
     cp object_detection/packages/tf2/setup.py . && \
     python -m pip install .
