@@ -1,0 +1,40 @@
+{
+	"name": "nd013-c1-vision-starter",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "nd013-c1-vision-starter",
+	"workspaceFolder": "/workspace",
+	"runArgs": [
+		"--runtime=nvidia",
+		"--gpus=all"
+	],
+	"settings": {
+		"terminal.integrated.automationShell.linux": "/bin/bash",
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black",
+		"python.formatting.blackPath": "/usr/local/bin/black",
+		"autoDocstring.customTemplatePath": ".devcontainer/doxygen.mustache"
+	},
+	"extensions": [
+		"ms-azuretools.vscode-docker",
+		"eamodio.gitlens",
+		"streetsidesoftware.code-spell-checker",
+		"oderwat.indent-rainbow",
+		"ms-vsliveshare.vsliveshare",
+		"pkief.material-icon-theme",
+		"uloco.theme-bluloco-dark",
+		"ms-python.python",
+		"ms-vscode.cpptools",
+		"xaver.clang-format",
+		"alefragnani.numbered-bookmarks",
+		"pnp.polacode",
+		"dbaeumer.vscode-eslint",
+		"2gua.rainbow-brackets",
+		"ajshort.msg",
+		"njpwerner.autodocstring",
+		"twxs.cmake",
+		"tyriar.sort-lines",
+		"ms-python.vscode-pylance",
+		"shinotatwu-ds.file-tree-generator",
+		"janisdd.vscode-edit-csv"
+	],
+}

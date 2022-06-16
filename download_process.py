@@ -1,6 +1,7 @@
 import argparse
 import io
 import os
+os.environ['CUDA_VISIBLE_DEVICES'] = "0"
 import subprocess
 
 import ray
