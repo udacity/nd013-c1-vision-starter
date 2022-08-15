@@ -1,8 +1,17 @@
 ### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+This is project write up for the Computer Vision course in which 2D object detection is performed via camera images to detect and clasify the following objects: vehicles, bicycles and pedestrians.
+This project is done via 4 steps:
+- step 1: Exploratory Data Analysis
+- step 2: Edit the config file
+- step 3: Model Training and Evaluation
+- step 4: Improve the Performance
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+For this project, Udacity project workspace was used with files and data already available in the workspace.
+
+To run the code, `main_negin.py` should be ran.
+
+To run jupyer note books, please run `ExploratoryDataAnalysis.ipynb` and `ExploreAugmentations_Negin.ipynb`.
 
 ### Dataset
 #### Dataset analysis
@@ -29,7 +38,7 @@ This section should highlight the different strategies you adopted to improve yo
 
 Modified config file in experiment1 and experiment2 folder as shown in the table below:
 
-Experiment0: unchanged cofig file using cosine_decay_learning_rate
+**Experiment0:** unchanged cofig file using cosine_decay_learning_rate
 
 ```
 optimizer {
