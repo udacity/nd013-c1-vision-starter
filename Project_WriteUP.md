@@ -37,7 +37,7 @@ optimizer {
 ```
 	
   
-Experiment1: using exponential_decay_learning_rate
+**Experiment1:** using exponential_decay_learning_rate
 
 ```
 optimizer {
@@ -52,12 +52,25 @@ optimizer {
 	    }
 ```
 
+Training logs obtained from Temsorboard are shown below:
 
-Experiment2: convert image to grey scale (randomly) and using exponential_decay_learning_rate
+![improve_perf_ex1_s4_1](https://user-images.githubusercontent.com/109758200/184705983-339a62c9-5545-495c-9360-517a4948ea3c.png)
+
+![improve_perf_ex1_s4_2](https://user-images.githubusercontent.com/109758200/184705993-f6a22cdb-9e09-4088-9d2f-ead1629609f9.png)
+
+**Experiment2:** convert image to grey scale (randomly) and using exponential_decay_learning_rate
 ```
 data_augmentation_options {
     random_rgb_to_gray {
       probability: 0.5
     }
 ```
+
+Training logs obtained from Tensorboard are shown below:
+
+![improve_perf_ex2_s4_1](https://user-images.githubusercontent.com/109758200/184705912-d104a093-d1d4-419a-8f5a-77e9bc97faaf.png)
+
+![improve_perf_ex2_s4_2](https://user-images.githubusercontent.com/109758200/184705930-4cb0ce72-03c8-43c5-bdef-da2cd59c0995.png)
+
+
 
