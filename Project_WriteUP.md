@@ -7,6 +7,16 @@ This section should contain a brief description of the steps to follow to run th
 ### Dataset
 #### Dataset analysis
 This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+
+First, we implement the `display_images` function in the `Exploratory Data Analysis` notebook. The results are shown below:
+![data_exploratory_analysis](https://user-images.githubusercontent.com/109758200/184712542-55baf11e-96da-4aa6-ac1c-7947d31ebccc.png)
+
+After augmentation, below is the results:
+
+![data_exploratoryaugmentaion_analysis 0 ](https://user-images.githubusercontent.com/109758200/184712252-e488ea70-effd-44a8-a9d5-d7223e71302a.png)
+
+![data_exploratoryaugmentaion_analysis 1 ](https://user-images.githubusercontent.com/109758200/184712274-af3eab35-d73a-4481-ae4b-0ce31a6761a7.png)
+
 #### Cross validation
 This section should detail the cross validation strategy and justify your approach.
 
