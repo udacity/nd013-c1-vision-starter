@@ -7,7 +7,7 @@ For this project, we will be using data from the [Waymo Open dataset](https://wa
 [OPTIONAL] - The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. We have already provided the data required to finish this project in the workspace, so you don't need to download it separately.
 
 ## Structure
-
+This project contains the necessary files for training an object detection resnet neural network. There are several python scripts that are useful for downloading training data and splitting it into train, validation and test datasets. Also there is a script to generate new config files to train the tensorflow model. There are two jupyter notebooks for visualization of the raw data and the augmented data respectively. 
 ### Data
 
 The data you will use for training, validation and testing is organized as follow:
@@ -40,6 +40,15 @@ experiments/
 
 ## Prerequisites
 
+The following python libraries are required:
+- Cython
+- jupyter
+- matplotlib
+- Pillow
+- ray
+- waymo-open-dataset-tf-2-5-0
+
+tensorflow and CUDA are required as well.
 ### Local Setup
 
 For local setup if you have your own Nvidia GPU, you can use the provided Dockerfile and requirements in the [build directory](./build).
@@ -141,16 +150,34 @@ python inference_video.py --labelmap_path label_map.pbtxt --model_path experimen
 ## Submission Template
 
 ### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+The aim of this project is to train an object detection model for a camera mounted on a car. Training data is taken out from the waymo open dataset. Object detection is a crucial feature of self driving cars because it allows to transform images into useful information providing the car with data about the relative position of objects that it has to avoid, preventing crashes and injuries. 
 
 ### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+For setting up the project you can follow the steps on the **Local Setup** section on this readme. Additionally you can use the [remote - containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) vscode extension to build the container and access it though vscode.
 
 ### Dataset
+As stated above, this project uses the data from the waymo open dataset. Instructions to download it from google cloud storage are provided above as well.
 #### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
+The selected dataset includes a higly variable group of images from highways, residential areas, parking lots, daytime, nightime, rain, etc. The following pictures show 10 random images that were overlayed with the ground truth bounding boxes.
+
+![img](exploratory_analysis.png)
+
+Only cars, pedestrians and bicycles are included in the ground truth data. The most common objects are by far cars follwed by pedestrians with about a third of the occurrences. bicycles are very rare; just as the histogram below shows: 
+
+![img](classes.png)
+
+The dataset shows great color variability. RGB values are quite uniformely distrubuted with a slightly higher probability of being ~80 likely due to the very common apperance of the greyish color of the street in the images. most images have good brightness as the picture below shows:
+
+![histogram](histogram.png)
+
 #### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+The dataset was split in 3 datasets containing:
+
+- 80% of the images for training
+- 15% of the images for validation
+- 5% of the images for testing
+
+Since the dataset is relatively large it is possible to rely on a smaller proportion for cross validation.
 
 ### Training
 #### Reference experiment
