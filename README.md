@@ -173,15 +173,69 @@ The dataset shows great color variability. RGB values are quite uniformely distr
 #### Cross validation
 The dataset was split in 3 datasets containing:
 
-- 80% of the images for training
-- 15% of the images for validation
-- 5% of the images for testing
+- 70% of the images for training
+- 20% of the images for validation
+- 10% of the images for testing
 
 Since the dataset is relatively large it is possible to rely on a smaller proportion for cross validation.
 
 ### Training
 #### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+The first training session was conducted with the default presets for 25000 epochs (see [pipeline](experiments/reference/pipeline_new.config)). the following picture shows how the loss behaved:
+
+![Screenshot from 2022-09-20 19-04-07](https://user-images.githubusercontent.com/71234974/191391728-0072ed40-d7d7-4b9b-9762-3f03ea82c9bd.png)
+
+In the warmup phase the loss was fairly low and constant, however in the epoch 4k a huge increase occurred. After that the training continued effectively reducing the loss as more iterations were run, however the final results were very poor anyway due to this huge increase that happened over a short period of time. This behavior was probably due to a high learning rate, which took the model way out of its minimum in very few iterations (see picture below).
+
+![image](https://user-images.githubusercontent.com/71234974/191393310-c00f8504-e865-468d-96ba-c366267aef9e.png)
+
+As the blue dots show, validation losses are consistent with the training losses, which shows that even if the performance of the model is poor it did not overfit. These were the final metric: 
+
+    - mAP@0.5IOU: 0.000063
+    - AP@0.5IOU/vehicle: 0.000126
+    - AP@0.5IOU/pedestrian: 0.000000
+    - AP@0.5IOU/cyclist: nan
+    - localization_loss: 0.889936
+    - classification_loss: 130.260071
+    - regularization_loss: 2002455621533696.000000
+    - total_loss: 2002455621533696.000000
+
+This metrics show once again that the performance of the model is poor. Cyclists AP is not reported likely due to the extremely low amount of cyclist in the datasets, as was discovered in the exploratory data analysis. The following training video also backs up this claim: 
+
+![gif](animation1.gif)
+
 
 #### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+
+From the observations above the following changes were introduced for the second training session (see [pipeline](experiments/solution/pipeline_new.config)): 
+
+1. To avoid the huge loss gain that occurred in the first run the learning rate was halved (from 0.04 to 0.02). Also the warmup learning rate was reduced (from 0.013 to 0.005)
+2. To mimic closer or further looks to the objects the `random_image_scale` data augmentation was added. This should increase the variability of the dataset by making objects appear at different distances from the car
+3. To mimic the effect of direct light or changes in the dynamic range of the camera the `random_distort_color` augmentation was added. This should increase the variability of the dataset by adding more challenging detection scenarios where sudden illumination changes occur
+4. to mimic the effect of driving at different hours (night, early in the morning, noon, etc) the `random_adjust_brightness` data augmentation was added. This should increase the variability of the dataset as well.
+
+Training was conducted again over 25000 epochs and results improved significantly: 
+
+![Screenshot from 2022-09-20 20-16-20](https://user-images.githubusercontent.com/71234974/191394256-b95e56ee-dd3e-40c0-89c9-176001e64cdf.png)
+
+The loss still clearly improves over time and the huge jump in the reference experiment is suppressed successfully. The blue (validation) points are a little bit higher than the orange loss curves, meaning that the model may have been slightly overtrained, however they also match some local maximum in the plots meaning that this phenomenon is limited.
+
+The learning rate as well as the loss were relatively stable at the time the experiment stopped, meaning that this is probably the best behavior that could have been obtained with these presets even is more training epochs were conducted. Note how the learning rate curve has lower values than the reference experiment
+
+
+![Screenshot from 2022-09-20 19-06-10](https://user-images.githubusercontent.com/71234974/191394267-63d52b60-4318-44ce-accf-4637981355dc.png)
+
+These were the final metrics:
+
+    - mAP@0.5IOU: 0.089866
+    - AP@0.5IOU/vehicle: 0.066611
+    - AP@0.5IOU/pedestrian: 0.113122
+    - AP@0.5IOU/cyclist: nan
+    - Loss/localization_loss: 0.326807
+    - Loss/classification_loss: 0.286569
+    - Loss/regularization_loss: 0.233031
+    - Loss/total_loss: 0.846408
+
+They show a significant improvement over the reference due to the changes in the learning rate and the data augmentation techniques used. This claim is also backed up by the training video of this experiment, which hugely contrasts with the previous one:
+
+![gifsito](animation.gif)
