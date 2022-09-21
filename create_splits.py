@@ -33,8 +33,8 @@ def split(source, destination):
     Path(val_path).mkdir(parents=True, exist_ok=True)
     available_files = os.listdir(source)
     random.shuffle(available_files)
-    train_samples = int(len(available_files)*0.8)
-    val_samples = int(len(available_files)*0.15)
+    train_samples = int(len(available_files)*0.7)
+    val_samples = int(len(available_files)*0.2)
     test_samples = len(available_files) - train_samples - val_samples
     for idx, file in enumerate(available_files):
         if idx < train_samples:
