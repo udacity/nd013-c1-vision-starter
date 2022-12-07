@@ -11,7 +11,7 @@ Please update the base image if you plan on using older versions of CUDA.
 ## Build
 Build the image with:
 ```
-docker build -t project-dev -f Dockerfile .
+docker build -t project-dev -f Dockerfile --build-arg UID=$(id -u) --build-arg GID=$(id -g) --build-arg UNAME=$(whoami) .
 ```
 
 Create a container with:

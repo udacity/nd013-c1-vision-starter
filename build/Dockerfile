@@ -13,6 +13,11 @@ ARG LIB_DIR_PREFIX=x86_64
 ARG LIBNVINFER=8.0.0-1
 ARG LIBNVINFER_MAJOR_VERSION=8
 
+# For creating a user
+ARG UNAME=usr
+ARG UID=1000
+ARG GID=1000
+
 # Let us install tzdata painlessly
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -97,3 +102,8 @@ RUN git clone https://github.com/tensorflow/models.git && \
 # Install google cloud SDK
 RUN curl -sSL https://sdk.cloud.google.com > /tmp/gcl && bash /tmp/gcl --install-dir=~/gcloud --disable-prompts
 ENV PATH="$PATH:/root/gcloud/google-cloud-sdk/bin"
+
+# Add user and set as default
+RUN groupadd -g $GID -o $UNAME
+RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
+USER $UNAME
