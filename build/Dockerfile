@@ -73,7 +73,7 @@ RUN apt update -y && \
 RUN ln -s $(which python3) /usr/local/bin/python
 
 RUN python -m pip install --upgrade pip && \
-    pip install tensorflow==2.5.0 tf-models-official==2.5.1 tensorflow_io==0.19.1 pyparsing==2.4.2 pycairo
+    pip install tensorflow==2.5.0 tf-models-official==2.5.1 tensorflow_io==0.19.1 keras==2.5.0rc pyparsing==2.4.2 pycairo
 
 WORKDIR /app
 
