@@ -106,4 +106,7 @@ ENV PATH="$PATH:/root/gcloud/google-cloud-sdk/bin"
 # Add user and set as default
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -m -u $UID -g $GID -o -s /bin/bash $UNAME
+# Make gcloud available for user
+RUN chmod -R 777 /root
+
 USER $UNAME
