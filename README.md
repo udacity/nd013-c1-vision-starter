@@ -1,14 +1,17 @@
-# Object Detection in an Urban Environment
+# Quan Bach - Object Detection in an Urban Environment Project Submission - Self Driving Car Engineer Nanodegree
 
-## Data
+------------------------------------------------------------------------------------------------------------------
+## Object Detection in an Urban Environment
+
+### Data
 
 For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/).
 
 [OPTIONAL] - The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. We have already provided the data required to finish this project in the workspace, so you don't need to download it separately.
 
-## Structure
+### Structure
 
-### Data
+#### Data
 
 The data you will use for training, validation and testing is organized as follow:
 ```
@@ -38,15 +41,15 @@ experiments/
     ...
 ```
 
-## Prerequisites
+### Prerequisites
 
-### Local Setup
+#### Local Setup
 
 For local setup if you have your own Nvidia GPU, you can use the provided Dockerfile and requirements in the [build directory](./build).
 
 Follow [the README therein](./build/README.md) to create a docker container and install all prerequisites.
 
-### Download and process the data
+#### Download and process the data
 
 **Note:** ”If you are using the classroom workspace, we have already completed the steps in the section for you. You can find the downloaded and processed files within the `/home/workspace/data/preprocessed_data/` directory. Check this out then proceed to the **Exploratory Data Analysis** part.
 
@@ -59,20 +62,20 @@ python download_process.py --data_dir {processed_file_location} --size {number o
 
 You are downloading 100 files (unless you changed the `size` parameter) so be patient! Once the script is done, you can look inside your `data_dir` folder to see if the files have been downloaded and processed correctly.
 
-### Classroom Workspace
+#### Classroom Workspace
 
 In the classroom workspace, every library and package should already be installed in your environment. You will NOT need to make use of `gcloud` to download the images.
 
 ## Instructions
 
-### Exploratory Data Analysis
+#### Exploratory Data Analysis
 
 You should use the data already present in `/home/workspace/data/waymo` directory to explore the dataset! This is the most important task of any machine learning project. To do so, open the `Exploratory Data Analysis` notebook. In this notebook, your first task will be to implement a `display_instances` function to display images and annotations using `matplotlib`. This should be very similar to the function you created during the course. Once you are done, feel free to spend more time exploring the data and report your findings. Report anything relevant about the dataset in the writeup.
 
 Keep in mind that you should refer to this analysis to create the different spits (training, testing and validation).
 
 
-### Create the training - validation splits
+#### Create the training - validation splits
 In the class, we talked about cross-validation and the importance of creating meaningful training and validation splits. For this project, you will have to create your own training and validation sets using the files located in `/home/workspace/data/waymo`. The `split` function in the `create_splits.py` file does the following:
 * create three subfolders: `/home/workspace/data/train/`, `/home/workspace/data/val/`, and `/home/workspace/data/test/`
 * split the tf records files between these three folders by symbolically linking the files from `/home/workspace/data/waymo/` to `/home/workspace/data/train/`, `/home/workspace/data/val/`, and `/home/workspace/data/test/`
@@ -82,7 +85,7 @@ Use the following command to run the script once your function is implemented:
 python create_splits.py --data-dir /home/workspace/data
 ```
 
-### Edit the config file
+#### Edit the config file
 
 Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf).
 
@@ -94,7 +97,7 @@ python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/w
 ```
 A new config file has been created, `pipeline_new.config`.
 
-### Training
+#### Training
 
 You will now launch your very first experiment with the Tensorflow object detection API. Move the `pipeline_new.config` to the `/home/workspace/experiments/reference` folder. Now launch the training process:
 * a training process:
@@ -112,7 +115,7 @@ python experiments/model_main_tf2.py --model_dir=experiments/reference/ --pipeli
 
 To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir experiments/reference/`. You will report your findings in the writeup.
 
-### Improve the performances
+#### Improve the performances
 
 Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup.
 
@@ -123,7 +126,7 @@ Keep in mind that the following are also available:
 **Important:** If you are working on the workspace, your storage is limited. You may to delete the checkpoints files after each experiment. You should however keep the `tf.events` files located in the `train` and `eval` folder of your experiments. You can also keep the `saved_model` folder to create your videos.
 
 
-### Creating an animation
+#### Creating an animation
 #### Export the trained model
 Modify the arguments of the following function to adjust it to your models:
 
@@ -138,23 +141,23 @@ Finally, you can create a video of your model's inferences for any tf record fil
 python inference_video.py --labelmap_path label_map.pbtxt --model_path experiments/reference/exported/saved_model --tf_record_path /data/waymo/testing/segment-12200383401366682847_2552_140_2572_140_with_camera_labels.tfrecord --config_path experiments/reference/pipeline_new.config --output_path animation.gif
 ```
 
-## Submission Template
+### Submission Template
 
-### Project overview
+#### Project overview
 This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
 
-### Set up
+#### Set up
 This section should contain a brief description of the steps to follow to run the code for this repository.
 
-### Dataset
-#### Dataset analysis
+#### Dataset
+##### Dataset analysis
 This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-#### Cross validation
+##### Cross validation
 This section should detail the cross validation strategy and justify your approach.
 
-### Training
-#### Reference experiment
+#### Training
+##### Reference experiment
 This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
 
-#### Improve on the reference
+##### Improve on the reference
 This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
