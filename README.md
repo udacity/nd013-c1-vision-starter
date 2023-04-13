@@ -1,4 +1,9 @@
 # Quan Bach - Object Detection in an Urban Environment Project Submission - Self Driving Car Engineer Nanodegree
+## Deliverables
+- EDA: QuanBach-Exploratory Data Analysis.ipynb
+- Data Augmentation: QuanBach-Explore augmentations.ipynb
+- Pipelines: ./experiments/reference
+- Report: ./Project_Report
 
 ------------------------------------------------------------------------------------------------------------------
 ## Object Detection in an Urban Environment
